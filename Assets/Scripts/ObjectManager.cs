@@ -25,7 +25,7 @@ public class ObjectManager : MonoBehaviour
     {
         if (ActiveObject != null)
         {
-            ActiveObject.GetComponent<ObjectController>().IsSelected = false;
+            ActiveObject.GetComponent<Block>().IsSelected = false;
         }
         ActiveObject = gameObject;
         return true;

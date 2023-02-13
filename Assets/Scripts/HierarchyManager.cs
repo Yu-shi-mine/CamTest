@@ -15,9 +15,6 @@ public class HierarchyManager : MonoBehaviour
     #region Constructor
     private void Start()
     {
-        GameObject o = Resources.Load("CubePrefab/Cube") as GameObject;
-        GameObject prefab = GameObject.Instantiate(o);
-        prefab.transform.position = new Vector3(3.5f, 0.5f, 5.5f);
         _assyCount = 0;
     }
     #endregion
