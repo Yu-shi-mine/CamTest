@@ -6,20 +6,20 @@ using UnityEngine;
 public class BlockRotater : MonoBehaviour
 {
     #region Property
-    [SerializeField] private Block block;
+    private Block _block;
     #endregion
 
     #region Constructor
-    private void Start()
+    private void Awake()
     {
-        
+        _block = this.transform.GetComponent<Block>();
     }
     #endregion
 
     #region Method
     private void Update()
     {
-        if (block.IsSelected)
+        if (_block.IsSelected)
         {
             ObjRotateKeyControl();
         }

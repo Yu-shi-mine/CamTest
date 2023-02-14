@@ -6,28 +6,23 @@ using UnityEngine;
 public class BlockMover : MonoBehaviour
 {
     #region Property
-    [SerializeField] private Block _block;
     [SerializeField] private bool _x;
     [SerializeField] private bool _y;
     [SerializeField] private bool _z;
 
-    Vector3 _presentPos;
-    Vector3 _nextPos;
+    private Vector3 _nextPos;
+    private Block _block;
     #endregion
 
     #region Constructor
     private void Awake()
     {
         _nextPos = Vector3.zero;
+        _block = this.transform.GetComponentInParent<Block>();
     }
     #endregion
 
     #region Method
-    private void Update()
-    {
-        _presentPos = _block.transform.position;
-    }
-
     private Vector3 _getNextPos(float x, float y, float z)
     {
         Vector3 nextPos = _block.transform.position;

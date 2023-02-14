@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7577522168546764152}
   m_Layer: 0
   m_Name: Cone
-  m_TagString: Untagged
+  m_TagString: IgnoreBlockCollision
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5648813602758118736}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2, y: 1, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalPosition: {x: 1, y: 1, z: 0}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_Children: []
   m_Father: {fileID: 4149287851186314243}
   m_RootOrder: 0
@@ -679,7 +679,7 @@ GameObject:
   - component: {fileID: 2265851497005525395}
   m_Layer: 0
   m_Name: arrow
-  m_TagString: Untagged
+  m_TagString: IgnoreBlockCollision
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -693,7 +693,7 @@ Transform:
   m_GameObject: {fileID: 7647537034205458638}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 1, z: 0.1}
+  m_LocalScale: {x: 0.2, y: 1, z: 0.2}
   m_Children:
   - {fileID: 807632142850821278}
   m_Father: {fileID: 0}
@@ -772,7 +772,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7647537034205458638}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -790,7 +790,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14772a8cfc9ef44192734320fbad6a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _block: {fileID: 0}
   _x: 0
   _y: 0
   _z: 0

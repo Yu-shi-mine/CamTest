@@ -36,7 +36,7 @@ public class HierarchyManager : MonoBehaviour
         subassyUI.transform.SetParent(_UIroot.transform, false);
     }
 
-    public void AddComponent()
+    public void AddNewBlock()
     {
 
     }
