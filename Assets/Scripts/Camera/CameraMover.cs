@@ -14,19 +14,18 @@ public class CameraMover : MonoBehaviour
     [SerializeField, Range(30.0f, 150.0f)]
     private float _mouseSensitive = 90.0f;
 
-    //カメラのtransform  
     private Transform _camTransform;
-    //マウスの始点 
     private Vector3 _startMousePos;
-    //カメラ回転の始点情報
     private Vector3 _presentCamRotation;
     private Vector3 _presentCamPos;
-    private Vector3 _origin = new Vector3(5, 0, 5);
+    private Vector3 _rotationOrigin;
     private Vector3 _rotateAxis = Vector3.up;
+    private ScreenUtil _screenUtil;
 
     void Start()
     {
         _camTransform = this.gameObject.transform;
+        _screenUtil = new ScreenUtil();
     }
 
     void Update()
@@ -56,8 +55,9 @@ public class CameraMover : MonoBehaviour
 
             Vector3 RotateAxis = Vector3.Cross(_camTransform.position, Vector3.up);
 
-            _camTransform.RotateAround(_origin, _rotateAxis, eulerX);
-            _camTransform.RotateAround(_origin, RotateAxis, eulerY);
+            _rotationOrigin = _screenUtil.ScreenCentorToWorldPosition();
+            _camTransform.RotateAround(_rotationOrigin, _rotateAxis, eulerX);
+            _camTransform.RotateAround(_rotationOrigin, RotateAxis, eulerY);
 
             _startMousePos = Input.mousePosition;
             _presentCamRotation.x = _camTransform.transform.eulerAngles.x;
@@ -65,7 +65,6 @@ public class CameraMover : MonoBehaviour
         }
     }
 
-    //カメラの移動 マウス
     private void CameraSlideMouseControl()
     {
         if (Input.GetMouseButtonDown(2))
