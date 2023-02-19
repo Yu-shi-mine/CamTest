@@ -2,19 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
 {
     #region Property
     [SerializeField] ActivePartManager _activePartManager;
-    [SerializeField] GameObject _partsParent;
+    [SerializeField] PartGenerator _partGenerator;
+    [SerializeField] GameObject _assembly;
+    private static GameObject _partsParent;
+    private static bool _isSaved;
+    private PartGenerator _generator;
+
+    public static GameObject PartsParent { get { return _partsParent; } }
+    public static bool IsSaved { get { return _isSaved; } set { _isSaved = value; } }
     #endregion
 
     #region Constructor
     private void Start()
     {
-
+        _partsParent = _assembly;
+        _generator = _partGenerator;
+        _isSaved = false;
     }
     #endregion
 
@@ -25,11 +35,21 @@ public class GameManager : MonoBehaviour
 
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.S)) { bool saved = FileIO.Save(_partsParent); }
+        if (Input.GetKeyDown(KeyCode.O)) { bool loaded = FileIO.Load(_partsParent); }
+        //if (Input.GetKeyDown(KeyCode.N)) { SceneManager.LoadScene("Main"); }
 #else
-        if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
+        if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetKeyDown(KeyCode.S))
         {
-            if (Input.GetKeyDown(KeyCode.S)) { Debug.Log("save"); }
+            bool saved = FileIO.Save(_partsParent);
         }
+        if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetKeyDown(KeyCode.O))
+        {
+            bool loaded = FileIO.Load(_partsParent);
+        }
+        //if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetKeyDown(KeyCode.N))
+        //{
+        //    SceneManager.LoadScene("Main");
+        //}
 #endif
     }
     #endregion
@@ -45,6 +65,11 @@ public class GameManager : MonoBehaviour
         {
             _activePartManager.ActivePart.Delete();
             Resources.UnloadUnusedAssets();
+        }
+
+        if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetKeyDown(KeyCode.D))
+        {
+            _generator.Generaete(_activePartManager.ActivePart);
         }
     }
     #endregion

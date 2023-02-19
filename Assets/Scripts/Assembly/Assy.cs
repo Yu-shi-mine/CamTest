@@ -8,14 +8,14 @@ using UnityEngine;
 public class Assy
 {
     #region Property
-    public List<PartInfo> _parts;
+    public List<PartInfo> PartInfoList;
     #endregion
 
     #region Constructor
     public Assy(List<GameObject> parts)
     {
-        _parts = new List<PartInfo>();
-        foreach (GameObject p in parts) { _parts.Add(new PartInfo(p)); }
+        PartInfoList = new List<PartInfo>();
+        foreach (GameObject p in parts) { PartInfoList.Add(new PartInfo(p)); }
     }
     #endregion
 }
@@ -25,19 +25,37 @@ public class Assy
 public class PartInfo
 {
     #region Property
-    public string _name;
-    public Vector3 _position;
-    public Quaternion _rotation;
-    public Material _material;
+    public string Name;
+    public Vector3 Position;
+    public Quaternion Rotation;
+    public int PartID;
+    public int MatrialID;
     #endregion
 
     #region Constructor
-    public PartInfo(GameObject part)
+    public PartInfo(GameObject o)
     {
-        _name = part.name;
-        _position = part.transform.position;
-        _rotation = part.transform.rotation;
-        _material = part.GetComponent<MeshRenderer>().material;
+        Name = o.name;
+        Position = o.transform.position;
+        Rotation = o.transform.rotation;
+        var p = o.GetComponent<Part>();
+        PartID = p.ID;
+        MatrialID = p.MaterialID;
+    }
+    #endregion
+}
+
+[System.Serializable]
+public class Objects
+{
+    #region Property
+    public GameObject _gameObject;
+    #endregion
+
+    #region Constructor
+    public Objects(GameObject parent)
+    {
+        _gameObject = parent;
     }
     #endregion
 }

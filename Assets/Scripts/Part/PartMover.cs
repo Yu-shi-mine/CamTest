@@ -8,7 +8,9 @@ public class PartMover : MonoBehaviour
     #region Property
     private Part _part;
     private Vector3 _nextPos;
-    private float _positionInterval = 0.5f;
+    private float _positionIntervalXZ = 0.5f;
+    private float _positionIntervalY = 0.2f;
+    private float _yPosShift = 0.1f;
     #endregion
 
     #region Constructor
@@ -32,11 +34,11 @@ public class PartMover : MonoBehaviour
         v = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, v.z));
 
         _nextPos = _part.transform.position;
-        if (axis == Vector3.right)      { _nextPos.x = RoundHalfUp(v.x, _positionInterval); }
-        if (axis == Vector3.up)         { _nextPos.y = RoundHalfUp(v.y, _positionInterval); }
-        if (axis == Vector3.forward)    { _nextPos.z = RoundHalfUp(v.z, _positionInterval); }
+        if (axis == Vector3.right)      { _nextPos.x = RoundHalfUp(v.x, _positionIntervalXZ); }
+        if (axis == Vector3.up)         { _nextPos.y = RoundHalfUp(v.y, _positionIntervalY) + _yPosShift; }
+        if (axis == Vector3.forward)    { _nextPos.z = RoundHalfUp(v.z, _positionIntervalXZ); }
 
-        if (_nextPos.y <= 0) { _nextPos.y = _part.Height; }
+        if (_nextPos.y <= _part.Height) { _nextPos.y = _part.Height; }
         return _nextPos;
     }
 

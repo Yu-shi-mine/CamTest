@@ -84,6 +84,7 @@ public class CameraMover : MonoBehaviour
 
             Vector3 velocity = _camTransform.rotation * new Vector3(x, y, 0);
             velocity = velocity + _presentCamPos;
+            if (velocity.y <= 0) { velocity.y = 0.1f; }
             _camTransform.position = velocity;
         }
     }
@@ -92,6 +93,7 @@ public class CameraMover : MonoBehaviour
     {
         Vector3 campos = _camTransform.position;
         campos += _camTransform.forward * Input.mouseScrollDelta.y;
+        if (campos.y <= 0) { campos.y = 0.1f; }
         _camTransform.position = campos;
     }
 }

@@ -1,14 +1,16 @@
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 using UnityEngine;
+
+using SFB;
 
 
 public class FileIO : MonoBehaviour
 {
     #region Property
+    private static ExtensionFilter[] _extentionFilter = new[] { new ExtensionFilter("Json", "json") };
     #endregion
 
     #region Constructor
@@ -22,12 +24,11 @@ public class FileIO : MonoBehaviour
     public static bool Save(GameObject parent)
     {
         string saveName = GetSaveName();
-        if (saveName == null) { return false; }
+        if ((saveName == null) || (saveName == "")) { return false; }
 
         var parts = GetChildObject(parent);
         Assy assy = new Assy(parts);
         WriteJson(JsonUtility.ToJson(assy), saveName);
-
         return true;
     }
 
@@ -39,22 +40,8 @@ public class FileIO : MonoBehaviour
     }
 
     private static string GetSaveName()
-    {
-        var dlg = new SaveFileDialog();
-        dlg.Filter = "json(*.json)|*.json|All files(*.*)|*.*";
-        dlg.CheckFileExists = false;
-        if (dlg.ShowDialog() == DialogResult.OK)
-        {
-            return dlg.FileName;
-        }
-        else if (dlg.ShowDialog() == DialogResult.Cancel)
-        {
-            return null;
-        }
-        else
-        {
-            return null;
-        }
+    {   
+        return StandaloneFileBrowser.SaveFilePanel("Save File", "", "New Assembly", "json");
     }
 
     private static void WriteJson(string json, string saveName)
@@ -65,39 +52,35 @@ public class FileIO : MonoBehaviour
         writer.Close();
     }
 
-    public static bool Load()
+    public static bool Load(GameObject parent)
     {
         string loadName = GetFileName();
-        if (loadName == null) { return false; }
+        if ((loadName == null) || (loadName == "")) { return false; }
 
-        string datastr = "";
         StreamReader reader;
         reader = new StreamReader(loadName);
-        datastr = reader.ReadToEnd();
+        string datastr = reader.ReadToEnd();
         reader.Close();
 
-        JsonUtility.FromJson<Assy>(datastr);
+        foreach (PartInfo p in JsonUtility.FromJson<Assy>(datastr).PartInfoList)
+        {
+            GameObject o = Instantiate(PartIDManager.GetGameObject(p.PartID));
+            o.transform.SetParent(parent.transform);
+            o.name = p.Name;
+            o.transform.position = p.Position;
+            o.transform.rotation = p.Rotation;
+            o.GetComponent<MeshRenderer>().material = MaterialIDManager.GetMaterial(p.MatrialID);
+        }
 
         return true;
     }
 
     private static string GetFileName()
     {
-        var dlg = new OpenFileDialog();
-        dlg.Filter = "json(*.json)|*.json|All files(*.*)|*.*";
-        dlg.CheckFileExists = false;
-        if (dlg.ShowDialog() == DialogResult.OK)
-        {
-            return dlg.FileName;
-        }
-        else if (dlg.ShowDialog() == DialogResult.Cancel)
-        {
-            return null;
-        }
-        else
-        {
-            return null;
-        }
+        string[] paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", _extentionFilter, false);
+
+        if ((paths.Length != 0) && (paths[0] != null)) { return paths[0]; }
+        else { return null; }
     }
     #endregion
 

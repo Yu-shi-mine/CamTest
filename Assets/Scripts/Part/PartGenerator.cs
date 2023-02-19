@@ -8,8 +8,6 @@ using UnityEngine;
 public class PartGenerator : MonoBehaviour
 {
     #region Property
-    [SerializeField] private GameObject _partsParent;
-
     private ScreenUtil _screenUtil;
     private Vector3 _generatePosition;
     private Quaternion _originRotation = Quaternion.Euler(0f, 0f, 0f);
@@ -27,7 +25,7 @@ public class PartGenerator : MonoBehaviour
     public void Generaete(Part part)
     {
         _generatePosition = GetGeneratePosition(part);
-        GameObject o = Instantiate(part.gameObject, _generatePosition, _originRotation, _partsParent.transform);
+        GameObject o = Instantiate(part.gameObject, _generatePosition, _originRotation, GameManager.PartsParent.transform);
         ActivePartManager.SetToActive(o.GetComponent<Part>());
     }
 

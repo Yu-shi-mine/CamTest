@@ -8,19 +8,25 @@ public class Part : MonoBehaviour
 {
     #region Property
     [SerializeField] private float _partHeight;
+    [SerializeField] private GameObject _boss;
     [SerializeField] private Coordinate _coodinate;
-    [SerializeField] private Material _opaqueMat;
     [SerializeField] private Material _transparentMat;
+    [SerializeField] private int _iD;
+    [SerializeField] private int _materialID;
 
-    public float Height { get { return _partHeight; } }
+    public float Height { get { return _partHeight; } set { _partHeight = value; } }
+    public int ID { get { return _partID; } set { _partID = value; } }
+    public int MaterialID { get { return _matID; } set { _matID = value; } }
     public bool IsActive { get { return _isActive; } set { _isActive = value; } }
     public PartMover Mover { get { return _partMover; } }
     public PartRotater Rotater { get { return _partRotater; } }
-    public Material PartMaterial { get { return _material; } set { _meshRenderer.material = value; } }
+    public Material PartMaterial { get { return _material; } set { ChangePartMaterial(value); } }
 
     private bool _isActive;
+    private int _partID;
+    private int _matID;
     private Material _material;
-    private MeshRenderer _meshRenderer;
+    private List<MeshRenderer> _meshRenderers = new List<MeshRenderer>();
     private PartMover _partMover;
     private PartRotater _partRotater;
     #endregion
@@ -28,15 +34,32 @@ public class Part : MonoBehaviour
     #region Constructor
     private void Awake()
     {
-        _isActive = false;
+        StartCoroutine("_Awake");
+        
+    }
 
-        _meshRenderer = this.GetComponent<MeshRenderer>();
+    private IEnumerator _Awake()
+    {
+        _isActive = false;
+        _partID = _iD;
+
+        _meshRenderers.Add(this.GetComponent<MeshRenderer>());
+        foreach (Transform t in _boss.transform) { _meshRenderers.Add(t.GetComponent<MeshRenderer>()); }
+
+        yield return StartCoroutine("WaitForMatID");
+        ChangePartMaterial(MaterialIDManager.GetMaterial(_matID));
+
         _partMover = this.GetComponent<PartMover>();
         _partRotater = this.GetComponent<PartRotater>();
     }
     #endregion
 
     #region Method
+    private IEnumerable WaitForMatID()
+    {
+        yield return new WaitUntil(() => MaterialIDManager.IsReady);
+    }
+
     public void ActivateAxis()
     {
         _coodinate.gameObject.SetActive(true);
@@ -55,7 +78,7 @@ public class Part : MonoBehaviour
 
     private void ChangePartMaterial(Material material)
     {
-        _meshRenderer.material = material;
+        foreach (MeshRenderer renderer in _meshRenderers) { renderer.material = material; }
     }
     #endregion
 
@@ -72,7 +95,7 @@ public class Part : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag != "IgnoreBlockCollision") { ChangePartMaterial(_opaqueMat); }
+        if (other.gameObject.tag != "IgnoreBlockCollision") { ChangePartMaterial(MaterialIDManager.GetMaterial(_matID)); }
     }
     #endregion
 }

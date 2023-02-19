@@ -9,6 +9,7 @@ public class ColorChanger : MonoBehaviour
 {
     #region Property
     [SerializeField] private ActivePartManager _activePartManager;
+    [SerializeField] private int _materialID;
 
     private Material _material;
     #endregion
@@ -24,6 +25,7 @@ public class ColorChanger : MonoBehaviour
     public void SetAcivePartColor()
     {
         _activePartManager.ActivePart.PartMaterial = _material;
+        _activePartManager.ActivePart.MaterialID = _materialID;
     }
     #endregion
 
